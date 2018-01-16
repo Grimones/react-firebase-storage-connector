@@ -8,7 +8,7 @@ import React, {
 
 const cache = {};
 
-export default function connect(mapStorageToProps: (props: Object) => Object) {
+export default function connect(mapStorageToProps: (props: Object) => Object, { debug } = { debug: false }) {
   return function wrap(ComponentToWrap: any) {
     class ConnectedComponent extends Component {
       state = {};
@@ -57,6 +57,9 @@ export default function connect(mapStorageToProps: (props: Object) => Object) {
               .then((url) => {
                 // Save url in cache and new state
                 newState[prop] = cache[mapping[prop].fullPath] = url;
+              })
+              .catch(error => {
+                if (debug) console.warn(error.code);
               });
           }
           return null;
